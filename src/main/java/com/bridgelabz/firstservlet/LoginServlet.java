@@ -20,12 +20,22 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 @WebServlet(
         description = "Login Servlet Testing",
         urlPatterns = { "/LoginServlet" },
         initParams = {
                 @WebInitParam(name = "user", value = "Rajiv"),
-                @WebInitParam(name = "password", value = "rajiv")
+                @WebInitParam(name = "password", value = "rajivJ@1")
         }
 )
 public class LoginServlet extends HttpServlet {
@@ -38,7 +48,9 @@ public class LoginServlet extends HttpServlet {
         String userId = getServletConfig().getInitParameter("user");
         String password = getServletConfig().getInitParameter("password");
         String validateUser = "^[A-Z][A-Za-z]{2,}$";
-        if (user.matches(validateUser)) {
+        String validatePassword = "^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[a-z])(?!.*[<>`])" +
+                "(?=[^.,:;'!@*_]*[.,:;'!@#*_][^.,:;'!@*_]*$).{8,}$";
+        if (user.matches(validateUser) && pwd.matches(validatePassword)) {
             if (userId.equals(user) && password.equals(pwd)) {
                 request.setAttribute("user", user);
                 request.getRequestDispatcher("LoginSuccess.jsp").forward(request, response);
@@ -53,7 +65,7 @@ public class LoginServlet extends HttpServlet {
         else {
             RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
             PrintWriter out = response.getWriter();
-            out.println("<font color=red>Username is incorrect.</font>");
+            out.println("<font color=red>Either username or password is incorrect.</font>");
             rd.include(request, response);
         }
     }
