@@ -15,6 +15,7 @@ public class FirstServlet extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         out.println("<h3>Welcome To First Servlet</h3>");
+        out.println("hello World!");
         out.close();
     }
 }
